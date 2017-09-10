@@ -33,7 +33,7 @@ void free_queue (cpaq_t *q) {
 int enqueue (cpaq_t *q, void *elem) {
 	/*puts ("enqueue ()");*/
    if (isfull (q)) return -1;
-   (char *) q->Q[q->tail] = elem;
+   ((char *) q->Q)[q->tail] = elem;
    q->tail = (q->tail + 1) % q->n;
    return 0;
 }
