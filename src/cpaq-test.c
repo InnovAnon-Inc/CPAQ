@@ -17,8 +17,8 @@ int main(void) {
    if (enqueue (&q, arr + 0) != 0) return EXIT_FAILURE;dumpq(&q, 2);
    if (enqueue (&q, arr + 1) != 0) return EXIT_FAILURE;dumpq(&q, 3);
    if (enqueue (&q, arr + 2) != 0) return EXIT_FAILURE;dumpq(&q, 4);
-   if (enqueue (&q, arr + 3) != 0) return EXIT_FAILURE;dumpq(&q, 5);
-   if (enqueue (&q, arr + 4) != 0) return EXIT_FAILURE;dumpq(&q, 6);
+   if (enqueue (&q, arr + 3) != 0) puts ("overflow");dumpq(&q, 5);
+   if (enqueue (&q, arr + 4) != 0) puts ("overflow");dumpq(&q, 6);
    /*memset (arr, 0, sizeof (arr));*/
    printf("%i\n", *(int const *) dequeue(&q));
       dumpq(&q, 7);
