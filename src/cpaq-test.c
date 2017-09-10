@@ -11,14 +11,14 @@ int main(void) {
    int const *tmp;
 
    cpaq_t q;
-   alloc_queue (&q, (size_t) N);
+   if (alloc_queue (&q, (size_t) N) != 0) return EXIT_FAILURE;
 
    dumpq(&q, 1);
-   enqueue (&q, arr + 0);dumpq(&q, 2);
-   enqueue (&q, arr + 1);dumpq(&q, 3);
-   enqueue (&q, arr + 2);dumpq(&q, 4);
-   enqueue (&q, arr + 3);dumpq(&q, 5);
-   enqueue (&q, arr + 4);dumpq(&q, 6);
+   if (enqueue (&q, arr + 0) != 0) return EXIT_FAILURE;dumpq(&q, 2);
+   if (enqueue (&q, arr + 1) != 0) return EXIT_FAILURE;dumpq(&q, 3);
+   if (enqueue (&q, arr + 2) != 0) return EXIT_FAILURE;dumpq(&q, 4);
+   if (enqueue (&q, arr + 3) != 0) return EXIT_FAILURE;dumpq(&q, 5);
+   if (enqueue (&q, arr + 4) != 0) return EXIT_FAILURE;dumpq(&q, 6);
    /*memset (arr, 0, sizeof (arr));*/
    printf("%i\n", *(int const *) dequeue(&q));
       dumpq(&q, 7);
