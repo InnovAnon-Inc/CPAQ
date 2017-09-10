@@ -35,7 +35,7 @@ int alloc_queue (
 
 __attribute__ ((nonnull (1), nothrow))
 void free_queue (cpaq_t *restrict q) {
-   free (q->Q);
+   free ((void *) (q->Q));
 }
 
 __attribute__ ((nonnull (1, 2), nothrow, warn_unused_result))
@@ -50,7 +50,7 @@ int enqueue (
 }
 
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
-void *dequeue (cpaq_t *restrict q) {
+void const *dequeue (cpaq_t *restrict q) {
    void *x;
    if (isempty (q)) return NULL;
    x = q->Q[q->head];
@@ -69,7 +69,7 @@ bool isfull (cpaq_t const *restrict q) {
 }
 
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result))
-void *gethead(cpaq_t const *restrict q) {
+void const *gethead(cpaq_t const *restrict q) {
    if (isempty (q)) return NULL;
    return q->Q[q->head];
 }
