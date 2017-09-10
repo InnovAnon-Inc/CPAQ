@@ -20,17 +20,17 @@ int main(void) {
    enqueue (&q, arr + 3);dumpq(&q, 5);
    enqueue (&q, arr + 4);dumpq(&q, 6);
    /*memset (arr, 0, sizeof (arr));*/
-   printf("%i\n", *(int *) dequeue(&q));
+   printf("%i\n", *(int const *) dequeue(&q));
       dumpq(&q, 7);
-   printf("%i\n", *(int *) dequeue(&q));
+   printf("%i\n", *(int const *) dequeue(&q));
       dumpq(&q, 8);
-   printf("%i\n", *(int *) dequeue(&q));
+   printf("%i\n", *(int const *) dequeue(&q));
       dumpq(&q, 9);
-   tmp = (int *) dequeue (&q);
+   tmp = (int const *) dequeue (&q);
    if (tmp == NULL) puts ("NULL");
    else printf("%i\n", *tmp);
       dumpq(&q, 10);
-   tmp = (int *) dequeue (&q);
+   tmp = (int const *) dequeue (&q);
    if (tmp == NULL) puts ("NULL");
    else printf ("%i\n", *tmp);
       dumpq(&q, 11);
