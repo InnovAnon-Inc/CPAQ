@@ -35,7 +35,7 @@ int alloc_queue (
 
 __attribute__ ((nonnull (1), nothrow))
 void free_queue (cpaq_t *restrict q) {
-   free ((void *restrict) (q->Q));
+   free ((void restrict*restrict) (q->Q));
 }
 
 __attribute__ ((nonnull (1, 2), nothrow, warn_unused_result))
