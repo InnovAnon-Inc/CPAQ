@@ -10,7 +10,7 @@ extern "C" {
 #include <glitter.h>
 
 typedef struct {
-	void *restrict *restrict Q;
+	void const *restrict *restrict Q;
 	size_t n;
 	size_t head;
 	size_t tail;
