@@ -5,31 +5,47 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
 #include <sys/types.h>
 
+#include <glitter.h>
+
 typedef struct {
-	void **Q;
+	void *const restrict *restrict Q;
 	size_t n;
 	size_t head;
 	size_t tail;
 } cpaq_t;
 
-void init_queue (cpaq_t *q, void *arr, size_t n);
-int alloc_queue (cpaq_t *q, size_t n) ;
-void free_queue (cpaq_t *q) ;
+void init_queue (
+	cpaq_t *restrict q,
+	void *restrict arr,
+	size_t n)
+__attribute__ ((nonnull (1, 2), nothrow)) ;
+int alloc_queue (
+	cpaq_t *restrict q,
+	size_t n)
+__attribute__ ((nonnull (1), nothrow, warn_unused_result)) ;
+void free_queue (cpaq_t *restrict q)
+__attribute__ ((nonnull (1), nothrow)) ;
 
 /* ret type == elem type */
-void *dequeue (cpaq_t *q) ;
+void *dequeue (cpaq_t *restrict q)
+__attribute__ ((nonnull (1), nothrow, warn_unused_result)) ;
 /* returns err code */
-int enqueue (cpaq_t *q, void *elem) ;
-bool isempty (cpaq_t *q)
-__attribute__ ((pure)) ;
-bool isfull (cpaq_t *q)
-__attribute__ ((pure)) ;
-void *gethead (cpaq_t *q)
-__attribute__ ((pure)) ;
-void dumpq(cpaq_t *q, int i) ;
+int enqueue (
+	cpaq_t *restrict q,
+	void const *restrict elem)
+__attribute__ ((nonnull (1, 2), nothrow, warn_unused_result)) ;
+bool isempty (cpaq_t const *restrict q)
+__attribute__ ((nonnull (1), nothrow, pure, warn_unused_result)) ;
+bool isfull (cpaq_t const *restrict q)
+__attribute__ ((nonnull (1), nothrow, pure, warn_unused_result)) ;
+void *gethead (cpaq_t const *restrict q)
+__attribute__ ((nonnull (1), nothrow, pure, warn_unused_result)) ;
+void dumpq(
+	cpaq_t const *restrict q,
+	int i)
+__attribute__ ((nonnull (1), nothrow)) ;
 
 #ifdef __cplusplus
 }
