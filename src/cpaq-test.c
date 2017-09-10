@@ -8,7 +8,7 @@
 
 int main(void) {
    int arr[] = {101, 202, 303, 404, 505};
-   int *tmp;
+   int const *tmp;
 
    cpaq_t q;
    alloc_queue (&q, (size_t) N);
