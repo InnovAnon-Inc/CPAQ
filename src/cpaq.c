@@ -35,7 +35,7 @@ int alloc_queue (
 
 __attribute__ ((nonnull (1), nothrow))
 void free_queue (cpaq_t *restrict q) {
-   free ((void *) (q->Q));
+   free ((void *restrict) (q->Q));
 }
 
 __attribute__ ((nonnull (1, 2), nothrow, warn_unused_result))
@@ -85,5 +85,5 @@ void dumpq(
       (int) q->tail);
    else
       printf(" tail:%i, Q[head]:%i\n",
-         (int) q->tail, *(int *) head);
+         (int) q->tail, *(int const *) head);
 }
