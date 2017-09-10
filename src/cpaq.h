@@ -9,7 +9,8 @@ extern "C" {
 #include <sys/types.h>
 
 typedef struct {
-	void *Q;
+	/*void *Q;*/
+	char *Q;
 	size_t n;
 	size_t head;
 	size_t tail;
