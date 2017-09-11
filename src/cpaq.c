@@ -15,7 +15,7 @@ int tail = 0;
 __attribute__ ((leaf, nonnull (1, 2), nothrow))
 void init_queue (
    cpaq_t *restrict q,
-   void *restrict arr,
+   void const *arr[],
    size_t n) {
    q->Q = arr;
    q->n = n;
@@ -27,7 +27,7 @@ __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 int alloc_queue (
    cpaq_t *restrict q,
    size_t n) {
-   void *restrict arr = malloc (n * sizeof (void *));
+   void const *restrict arr = malloc (n * sizeof (void *));
    error_check (arr == NULL) return -1;
    init_queue (q, arr, n);
    return 0;
