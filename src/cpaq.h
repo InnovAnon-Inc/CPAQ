@@ -20,28 +20,35 @@ void init_queue (
 	cpaq_t *restrict q,
 	void *restrict arr,
 	size_t n)
-__attribute__ ((nonnull (1, 2), nothrow)) ;
+__attribute__ ((leaf, nonnull (1, 2), nothrow)) ;
+
 int alloc_queue (
 	cpaq_t *restrict q,
 	size_t n)
 __attribute__ ((nonnull (1), nothrow, warn_unused_result)) ;
+
 void free_queue (cpaq_t *restrict q)
-__attribute__ ((nonnull (1), nothrow)) ;
+__attribute__ ((leaf, nonnull (1), nothrow)) ;
 
 /* ret type == elem type */
 void const *dequeue (cpaq_t *restrict q)
 __attribute__ ((nonnull (1), nothrow, warn_unused_result)) ;
+
 /* returns err code */
 int enqueue (
 	cpaq_t *restrict q,
 	void const *restrict elem)
 __attribute__ ((nonnull (1, 2), nothrow, warn_unused_result)) ;
+
 bool isempty (cpaq_t const *restrict q)
-__attribute__ ((nonnull (1), nothrow, pure, warn_unused_result)) ;
+__attribute__ ((leaf, nonnull (1), nothrow, pure, warn_unused_result)) ;
+
 bool isfull (cpaq_t const *restrict q)
-__attribute__ ((nonnull (1), nothrow, pure, warn_unused_result)) ;
+__attribute__ ((leaf, nonnull (1), nothrow, pure, warn_unused_result)) ;
+
 void const *gethead (cpaq_t const *restrict q)
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result)) ;
+
 void dumpq(
 	cpaq_t const *restrict q,
 	int i)

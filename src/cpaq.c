@@ -12,7 +12,7 @@ int head = 0;
 int tail = 0;
 */
 
-__attribute__ ((nonnull (1, 2), nothrow))
+__attribute__ ((leaf, nonnull (1, 2), nothrow))
 void init_queue (
    cpaq_t *restrict q,
    void *restrict arr,
@@ -33,7 +33,7 @@ int alloc_queue (
    return 0;
 }
 
-__attribute__ ((nonnull (1), nothrow))
+__attribute__ ((leaf, nonnull (1), nothrow))
 void free_queue (cpaq_t *restrict q) {
    free (q->Q);
 }
@@ -58,12 +58,12 @@ void const *dequeue (cpaq_t *restrict q) {
    return x;
 }
 
-__attribute__ ((nonnull (1), nothrow, pure, warn_unused_result))
+__attribute__ ((leaf, nonnull (1), nothrow, pure, warn_unused_result))
 bool isempty (cpaq_t const *restrict q) {
    return q->head == q->tail;
 }
 
-__attribute__ ((nonnull (1), nothrow, pure, warn_unused_result))
+__attribute__ ((leaf, nonnull (1), nothrow, pure, warn_unused_result))
 bool isfull (cpaq_t const *restrict q) {
    return q->head == (q->tail + 1) % q->n;
 }
