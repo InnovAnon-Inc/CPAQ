@@ -27,7 +27,7 @@ __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 int alloc_queue (
    cpaq_t *restrict q,
    size_t n) {
-   void const *restrict arr = malloc (n * sizeof (void *));
+   void const **restrict arr = malloc (n * sizeof (void *));
    error_check (arr == NULL) return -1;
    init_queue (q, arr, n);
    return 0;
