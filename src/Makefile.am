@@ -7,3 +7,5 @@ bin_PROGRAMS = cpaq-test
 cpaq_test_SOURCES = cpaq-test.c
 cpaq_test_LDADD = libcpaq.la
 #cpaq_test_CFLAGS =
+
+AM_CPPFLAGS = -D__STDC_INT64__
