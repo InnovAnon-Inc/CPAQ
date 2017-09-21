@@ -1,6 +1,6 @@
 lib_LTLIBRARIES = libcpaq.la
 libcpaq_la_SOURCES = cpaq.c
-include_HEADERS	= cpaq.h
+include_HEADERS = cpaq.h
 #libcpaq_la_CFLAGS =
 
 bin_PROGRAMS = cpaq-test
