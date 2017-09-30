@@ -38,7 +38,7 @@ int alloc_queue (
 }
 
 __attribute__ ((leaf, nonnull (1), nothrow))
-void free_queue (cpaq_t *restrict q) {
+void free_queue (cpaq_t const *restrict q) {
    free (q->Q);
 }
 
@@ -77,6 +77,8 @@ void const *gethead(cpaq_t const *restrict q) {
    error_check (isempty (q) != false) return NULL;
    return q->Q[q->head];
 }
+
+TODO (generic dumpq)
 
 __attribute__ ((nonnull (1), nothrow))
 void dumpq(
