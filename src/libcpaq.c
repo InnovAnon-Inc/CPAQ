@@ -22,7 +22,7 @@ int tail = 0;
 __attribute__ ((leaf, nonnull (1, 2), nothrow))
 void init_queue (
    cpaq_t *restrict q,
-   void const *arr[],
+   void *restrict arr[],
    size_t n) {
    q->Q = arr;
    q->n = n;
@@ -34,7 +34,7 @@ __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 int alloc_queue (
    cpaq_t *restrict q,
    size_t n) {
-   void const **restrict arr = malloc (n * sizeof (void *));
+   void *restrict *restrict arr = malloc (n * sizeof (void *));
    error_check (arr == NULL) return -1;
    init_queue (q, arr, n);
    return 0;
@@ -279,7 +279,8 @@ void *index_cpaq (cpaq_t const *restrict cpaq, size_t i) {
 #endif
 
 __attribute__ ((leaf, nonnull (1, 2), nothrow))
-void enqueues (cpaq_t *restrict q, void const *restrict *restrict e, size_t n) {
+void enqueues (cpaq_t *restrict q,
+   void const *restrict const *restrict e, size_t n) {
 #ifndef NDEBUG
    size_t chk_rem  = remaining_space_cpaq (q);
    size_t chk_used = used_space_cpaq (q);
@@ -299,7 +300,8 @@ void enqueues (cpaq_t *restrict q, void const *restrict *restrict e, size_t n) {
 }
 
 __attribute__ ((leaf, nonnull (1, 2), nothrow))
-void dequeues (cpaq_t *restrict q, void *restrict *restrict e, size_t n) {
+void dequeues (cpaq_t *restrict q,
+   void const *restrict *restrict e, size_t n) {
 #ifndef NDEBUG
    size_t chk_rem  = remaining_space_cpaq (q);
    size_t chk_used = used_space_cpaq (q);
