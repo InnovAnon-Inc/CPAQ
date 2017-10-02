@@ -299,7 +299,7 @@ void enqueues (cpaq_t *restrict q, void const *restrict *restrict e, size_t n) {
 }
 
 __attribute__ ((leaf, nonnull (1, 2), nothrow))
-void dequeues (cpaq_t *restrict q, void *restrict e, size_t n) {
+void dequeues (cpaq_t *restrict q, void *restrict *restrict e, size_t n) {
 #ifndef NDEBUG
    size_t chk_rem  = remaining_space_cpaq (q);
    size_t chk_used = used_space_cpaq (q);
