@@ -135,11 +135,11 @@ void const *gethead_chk (cpaq_t const *restrict q) {
 __attribute__ ((leaf, nonnull (1), nothrow, pure, warn_unused_result))
 void const *gettail (cpaq_t const *restrict q) {
    assert (! isempty (q));
-   return q->Q[(q->tail - 1) % q->array.n];
+   return q->Q[(q->tail - 1) % q->n];
 }
 
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result))
-void *gettail_chk (cpaq_t const *restrict q) {
+void const *gettail_chk (cpaq_t const *restrict q) {
    error_check (isempty (q) != false) return NULL;
    return gettail (q);
 }

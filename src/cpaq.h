@@ -70,13 +70,13 @@ __attribute__ ((leaf, nonnull (1), nothrow, pure, warn_unused_result)) ;
 void *gettail_chk (cpaq_t const *restrict q)
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result)) ;
 
-size_t cpaqsz (size_t esz, size_t n)
+size_t cpaqsz (size_t n)
 __attribute__ ((const, leaf, nothrow, warn_unused_result)) ;
 
 size_t cpaqsz2 (cpaq_t const *restrict cpaq)
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result)) ;
 
-cpaq_t *ez_alloc_cpaq (size_t esz, size_t maxn)
+cpaq_t *ez_alloc_cpaq (size_t maxn)
 __attribute__ ((nothrow, warn_unused_result)) ;
 
 void ez_free_cpaq (cpaq_t *restrict cpaq)
