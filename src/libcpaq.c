@@ -22,7 +22,7 @@ int tail = 0;
 __attribute__ ((leaf, nonnull (1, 2), nothrow))
 void init_queue (
    cpaq_t *restrict q,
-   void *restrict arr[],
+   void *arr[],
    size_t n) {
    q->Q = arr;
    q->n = n;
