@@ -48,7 +48,7 @@ void free_queue (cpaq_t const *restrict q) {
 __attribute__ ((nonnull (1, 2), nothrow))
 void enqueue (
    cpaq_t *restrict q,
-   void const *restrict elem) {
+   void *restrict elem) {
 #ifndef NDEBUG
    size_t chk_rem  = remaining_space_cpaq (q);
    size_t chk_used = used_space_cpaq (q);

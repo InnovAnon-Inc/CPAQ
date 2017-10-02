@@ -37,7 +37,7 @@ __attribute__ ((nonnull (1), nothrow, warn_unused_result)) ;
 /* returns err code */
 void enqueue (
 	cpaq_t *restrict q,
-	void const *restrict elem)
+	void *restrict elem)
 __attribute__ ((nonnull (1, 2), nothrow)) ;
 
 bool isempty (cpaq_t const *restrict q)
