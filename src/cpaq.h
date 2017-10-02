@@ -54,12 +54,13 @@ void dumpq(
 	int i)
 __attribute__ ((nonnull (1), nothrow)) ;
 */
+#ifdef TEST
 int dequeue_chk (cpaq_t *restrict q, void *restrict e)
 __attribute__ ((nonnull (1, 2), nothrow, warn_unused_result)) ;
 
 int enqueue_chk (cpaq_t *restrict q, void const *restrict e)
 __attribute__ ((nonnull (1, 2), nothrow, warn_unused_result)) ;
-
+#endif
 void const *gethead_chk (cpaq_t const *restrict q)
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result)) ;
 

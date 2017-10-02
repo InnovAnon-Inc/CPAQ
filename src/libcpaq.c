@@ -284,7 +284,7 @@ void enqueues (cpaq_t *restrict q, void const *restrict *restrict e, size_t n) {
    size_t chk_rem  = remaining_space_cpaq (q);
    size_t chk_used = used_space_cpaq (q);
 #endif
-   size_t diff = q->array.n - q->tail;
+   size_t diff = q->n - q->tail;
    assert (n == 0 || ! isfull (q));
    assert (remaining_space_cpaq (q) >= n);
    if (q->head > q->tail || n <= diff)
@@ -293,18 +293,18 @@ void enqueues (cpaq_t *restrict q, void const *restrict *restrict e, size_t n) {
       memcpy (e + 0   , q->Q + q->tail, diff);
       memcpy (e + diff, q->Q + 0,       n - diff);
    }
-   q->tail = (q->tail + n) % q->array.n;
+   q->tail = (q->tail + n) % q->n;
    assert (chk_rem  - n == remaining_space_cpaq (q));
    assert (chk_used + n == used_space_cpaq      (q));
 }
 
 __attribute__ ((leaf, nonnull (1, 2), nothrow))
-void dequeues (caq_t *restrict q, void *restrict e, size_t n) {
+void dequeues (cpaq_t *restrict q, void *restrict e, size_t n) {
 #ifndef NDEBUG
    size_t chk_rem  = remaining_space_cpaq (q);
    size_t chk_used = used_space_cpaq (q);
 #endif
-   size_t diff = q->array.n - q->head;
+   size_t diff = q->n - q->head;
    assert (n == 0 || ! isempty (q));
    assert (used_space_cpaq (q) >= n);
    if (q->tail > q->head || n <= diff)
@@ -313,7 +313,7 @@ void dequeues (caq_t *restrict q, void *restrict e, size_t n) {
       memcpy (e + 0,    q->Q + q->head, diff);
       memcpy (e + diff, q->Q + 0,       n - diff);
    }
-   q->head = (q->head + n) % q->array.n;
+   q->head = (q->head + n) % q->n;
    assert (chk_rem  + n == remaining_space_cpaq (q));
    assert (chk_used - n == used_space_cpaq      (q));
 }
@@ -324,13 +324,13 @@ void frees_cpaq (cpaq_t const *restrict cpaq, free_t f) {
    if (cpaq->head <= cpaq->tail) {
 	#pragma GCC ivdep
       for (i = cpaq->head; i != cpaq->tail; i++)
-         f (cpaq-Q[i]);
+         f (cpaq->Q[i]);
    } else {
 	#pragma GCC ivdep
       for (i = cpaq->head; i != cpaq->n;    i++)
-         f (cpaq-Q[i]);
+         f (cpaq->Q[i]);
 	#pragma GCC ivdep
       for (i = 0;          i != cpaq->tail; i++)
-         f (cpaq-Q[i]);
+         f (cpaq->Q[i]);
    }
 }
