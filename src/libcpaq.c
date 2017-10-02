@@ -307,12 +307,16 @@ void dequeues (cpaq_t *restrict q, void *restrict e, size_t n) {
    size_t diff = q->n - q->head;
    assert (n == 0 || ! isempty (q));
    assert (used_space_cpaq (q) >= n);
+   TODO (qualifiers)
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wdiscarded-qualifiers"
    if (q->tail > q->head || n <= diff)
-      memcpy (e, q->Q + q->head, n);
+      memcpy (e, q->Q + q->head, n * sizeof (void *));
    else {
-      memcpy (e + 0,    q->Q + q->head, diff);
-      memcpy (e + diff, q->Q + 0,       n - diff);
+      memcpy (e + 0,    q->Q + q->head, diff * sizeof (void *));
+      memcpy (e + diff, q->Q + 0,       (n - diff) * sizeof (void *));
    }
+	#pragma GCC diagnostic pop
    q->head = (q->head + n) % q->n;
    assert (chk_rem  + n == remaining_space_cpaq (q));
    assert (chk_used - n == used_space_cpaq      (q));
