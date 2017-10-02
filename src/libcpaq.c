@@ -61,12 +61,14 @@ void enqueue (
    assert (chk_used + 1 == used_space_cpaq      (q));
 }
 
+#ifdef TEST
 __attribute__ ((nonnull (1, 2), nothrow, warn_unused_result))
 int enqueue_chk (cpaq_t *restrict q, void const *restrict e) {
    error_check (isfull (q) != false) return -1;
    enqueue (q, e);
    return 0;
 }
+#endif
 
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 void const *dequeue (cpaq_t *restrict q) {
@@ -84,12 +86,14 @@ void const *dequeue (cpaq_t *restrict q) {
    return x;
 }
 
+#ifdef TEST
 __attribute__ ((nonnull (1, 2), nothrow, warn_unused_result))
 int dequeue_chk (cpaq_t *restrict q, void *restrict e) {
    error_check (isempty (q) != false) return -1;
    dequeue (q, e);
    return 0;
 }
+#endif
 
 __attribute__ ((leaf, nonnull (1), nothrow, pure, warn_unused_result))
 bool isempty (cpaq_t const *restrict q) {
