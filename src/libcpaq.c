@@ -34,7 +34,7 @@ __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 int alloc_queue (
    cpaq_t *restrict q,
    size_t n) {
-   void *restrict *restrict arr = malloc (n * sizeof (void *));
+   void **restrict arr = malloc (n * sizeof (void *));
    error_check (arr == NULL) return -1;
    init_queue (q, arr, n);
    return 0;
@@ -121,25 +121,25 @@ bool isfull (cpaq_t const *restrict q) {
 }
 
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result))
-void const *gethead(cpaq_t const *restrict q) {
+void *gethead(cpaq_t const *restrict q) {
    assert (! isempty (q));
    return q->Q[q->head];
 }
 
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result))
-void const *gethead_chk (cpaq_t const *restrict q) {
+void *gethead_chk (cpaq_t const *restrict q) {
    error_check (isempty (q) != false) return NULL;
    return gethead (q);
 }
 
 __attribute__ ((leaf, nonnull (1), nothrow, pure, warn_unused_result))
-void const *gettail (cpaq_t const *restrict q) {
+void *gettail (cpaq_t const *restrict q) {
    assert (! isempty (q));
    return q->Q[(q->tail - 1) % q->n];
 }
 
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result))
-void const *gettail_chk (cpaq_t const *restrict q) {
+void *gettail_chk (cpaq_t const *restrict q) {
    error_check (isempty (q) != false) return NULL;
    return gettail (q);
 }

@@ -46,7 +46,7 @@ __attribute__ ((leaf, nonnull (1), nothrow, pure, warn_unused_result)) ;
 bool isfull (cpaq_t const *restrict q)
 __attribute__ ((leaf, nonnull (1), nothrow, pure, warn_unused_result)) ;
 
-void const *gethead (cpaq_t const *restrict q)
+void *gethead (cpaq_t const *restrict q)
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result)) ;
 /*
 void dumpq(
@@ -61,10 +61,10 @@ __attribute__ ((nonnull (1, 2), nothrow, warn_unused_result)) ;
 int enqueue_chk (cpaq_t *restrict q, void const *restrict e)
 __attribute__ ((nonnull (1, 2), nothrow, warn_unused_result)) ;
 #endif
-void const *gethead_chk (cpaq_t const *restrict q)
+void *gethead_chk (cpaq_t const *restrict q)
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result)) ;
 
-void const *gettail (cpaq_t const *restrict q)
+void *gettail (cpaq_t const *restrict q)
 __attribute__ ((leaf, nonnull (1), nothrow, pure, warn_unused_result)) ;
 
 void *gettail_chk (cpaq_t const *restrict q)
