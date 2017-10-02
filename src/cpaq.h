@@ -18,7 +18,7 @@ typedef struct {
 
 void init_queue (
 	cpaq_t *restrict q,
-	void const *arr[],
+	void *restrict arr[],
 	size_t n)
 __attribute__ ((leaf, nonnull (1, 2), nothrow)) ;
 
