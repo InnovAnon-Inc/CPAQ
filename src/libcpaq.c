@@ -163,7 +163,7 @@ void dumpq(
 
 __attribute__ ((const, leaf, nothrow, warn_unused_result))
 size_t cpaqsz (size_t n) {
-   return sizeof (cpaq_t) + datasz (sizeof (void *), n + 1);
+   return sizeof (cpaq_t) + sizeof (void *) * (n + 1);
 }
 
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result))
@@ -176,10 +176,10 @@ cpaq_t *ez_alloc_cpaq (size_t maxn) {
    void *restrict *restrict combined[2];
 	size_t eszs[2];
 	cpaq_t *restrict cpaq;
-	void *restrict *restrict data;
+	void **restrict data;
 
 	eszs[0] = sizeof (cpaq_t);
-	eszs[1] = datasz  (sizeof (void **), maxn + 1);
+	eszs[1] = sizeof (void **) * (maxn + 1);
    combined[0] = (void *restrict *restrict) &cpaq;
    combined[1] = (void *restrict *restrict) &data;
 	error_check (mmalloc2 (combined, eszs,
@@ -204,7 +204,7 @@ size_t used_space_cpaq (cpaq_t const *restrict cpaq) {
    if (cpaq->head <= cpaq->tail)
       ret = cpaq->tail - cpaq->head;
    else
-      ret = cpaq->tail /*+ 1*/ + (cpaq->array.n - cpaq->head);
+      ret = cpaq->tail /*+ 1*/ + (cpaq->n - cpaq->head);
    assert (ret <= cpaq->n - 1);
    return ret;
 }
@@ -280,7 +280,7 @@ void *index_cpaq (cpaq_t const *restrict cpaq, size_t i) {
 
 __attribute__ ((leaf, nonnull (1, 2), nothrow))
 void enqueues (cpaq_t *restrict q,
-   void const *restrict const *restrict e, size_t n) {
+   void * const *restrict e, size_t n) {
 #ifndef NDEBUG
    size_t chk_rem  = remaining_space_cpaq (q);
    size_t chk_used = used_space_cpaq (q);
@@ -301,7 +301,7 @@ void enqueues (cpaq_t *restrict q,
 
 __attribute__ ((leaf, nonnull (1, 2), nothrow))
 void dequeues (cpaq_t *restrict q,
-   void const *restrict *restrict e, size_t n) {
+   void **restrict e, size_t n) {
 #ifndef NDEBUG
    size_t chk_rem  = remaining_space_cpaq (q);
    size_t chk_used = used_space_cpaq (q);

@@ -106,11 +106,11 @@ __attribute__ ((leaf, nonnull (1), nothrow, pure, returns_nonnull, warn_unused_r
 #endif
 
 void enqueues (cpaq_t *restrict q,
-	void const *restrict const *restrict e, size_t n)
+	void *const *restrict e, size_t n)
 __attribute__ ((leaf, nonnull (1, 2), nothrow)) ;
 
 void dequeues (cpaq_t *restrict q,
-	void const *restrict *restrict e, size_t n)
+	void **restrict e, size_t n)
 __attribute__ ((leaf, nonnull (1, 2), nothrow)) ;
 
 typedef __attribute__ ((nonnull (1)))
