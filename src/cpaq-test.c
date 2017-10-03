@@ -11,6 +11,7 @@
 #define N (4)
 
 int main(void) {
+#ifdef TEST
    int arr[] = {101, 202, 303, 404, 505};
    int const *tmp;
 
@@ -40,5 +41,6 @@ int main(void) {
       dumpq(&q, 11);
 
    free_queue (&q);
+#endif
    return EXIT_SUCCESS;
 }
