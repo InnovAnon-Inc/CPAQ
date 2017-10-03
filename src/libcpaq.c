@@ -292,7 +292,7 @@ void enqueues (cpaq_t *restrict q,
       memcpy (q->Q + q->tail, e, n);
    else {
       memcpy (q->Q + q->tail, e,        diff);
-      memcpy (q->Q + 0        e + diff, n - diff);
+      memcpy (q->Q + 0,       e + diff, n - diff);
    }
    q->tail = (q->tail + n) % q->n;
    assert (chk_rem  - n == remaining_space_cpaq (q));
