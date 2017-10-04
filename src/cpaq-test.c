@@ -52,7 +52,7 @@ __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int cpaq_add_test (void *restrict arg_) {
    int *tmp;
    int err = add_test (arg_, &tmp,
-      (isfull_t) isfull, generate_int, (add_t) enqueue);
+      (isfull_t) isfull, generate_pint, (add_t) enqueue);
    if (err == TEST_NA) return 0;
    error_check (err != 0) return -1;
    fprintf (stderr, "cpaq_add_test (), tmp:%d\n", *tmp);
@@ -76,7 +76,7 @@ __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int cpaq_adds_test (void *restrict arg_) {
    int *tmps[13]; /* arbitrary params */
    error_check (adds_test (arg_, tmps, ARRSZ (tmps),
-      (remaining_space_t) remaining_space_caq,
+      (remaining_space_t) remaining_space_cpaq,
       generates_pint, (adds_t) enqueues) != 0)
       return -1;
    /* can't print tmps, because we don't know how many elements are init'd */
@@ -88,7 +88,7 @@ static int cpaq_adds_test (void *restrict arg_) {
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int cpaq_removes_test (void *restrict arg_) {
    int *tmps[12]; /* arbitrary params */
-   error_check (removes2_test (arg_, tmps, ARRSZ (tmps),
+   error_check (removes_test2 (arg_, tmps, ARRSZ (tmps),
       (used_space_t) used_space_cpaq, (removes_t) dequeues,
       (frees_t) degenerates_pint) != 0)
       return -1;
