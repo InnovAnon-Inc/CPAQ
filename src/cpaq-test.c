@@ -51,7 +51,7 @@ static void degenerates_pint (void *restrict arg_, size_t n) {
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int cpaq_add_test (void *restrict arg_) {
    int *tmp;
-   int err = add_test (arg_, &tmp,
+   int err = padd_test (arg_, &tmp,
       (isfull_t) isfull, generate_pint, (add_t) enqueue);
    if (err == TEST_NA) return 0;
    error_check (err != 0) return -1;
@@ -63,7 +63,7 @@ static int cpaq_add_test (void *restrict arg_) {
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int cpaq_remove_test (void *restrict arg_) {
    int *tmp;
-   int err = remove_test2 (arg_, &tmp,
+   int err = premove_test (arg_, &tmp,
       (isempty_t) isempty, (remove_t) dequeue, degenerate_pint);
    if (err == TEST_NA) return 0;
    error_check (err != 0) return -1;
@@ -75,7 +75,7 @@ static int cpaq_remove_test (void *restrict arg_) {
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int cpaq_adds_test (void *restrict arg_) {
    int *tmps[13]; /* arbitrary params */
-   error_check (adds_test (arg_, tmps, ARRSZ (tmps),
+   error_check (padds_test (arg_, tmps, ARRSZ (tmps),
       (remaining_space_t) remaining_space_cpaq,
       generates_pint, (adds_t) enqueues) != 0)
       return -1;
@@ -88,7 +88,7 @@ static int cpaq_adds_test (void *restrict arg_) {
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int cpaq_removes_test (void *restrict arg_) {
    int *tmps[12]; /* arbitrary params */
-   error_check (removes_test2 (arg_, tmps, ARRSZ (tmps),
+   error_check (premoves_test (arg_, tmps, ARRSZ (tmps),
       (used_space_t) used_space_cpaq, (removes_t) dequeues,
       (frees_t) degenerates_pint) != 0)
       return -1;
