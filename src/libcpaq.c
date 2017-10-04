@@ -80,7 +80,7 @@ void const *dequeue (cpaq_t *restrict q) {
    void const *restrict x;
    /*error_check (isempty (q) != false) return NULL;*/
    assert (! isempty (q));
-   get_parray (&(q->parray), q->head, x);
+   x = get_parray (&(q->array), q->head);
    /*x = q->Q[q->head];*/
    q->head = (q->head + 1) % q->array.n;
    assert (chk_rem  + 1 == remaining_space_cpaq (q));
@@ -171,7 +171,7 @@ size_t cpaqsz (size_t n) {
 
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result))
 size_t cpaqsz2 (cpaq_t const *restrict cpaq) {
-   return cpaqsz (cpaq->n);
+   return cpaqsz (cpaq->array.n);
 }
 
 __attribute__ ((nothrow, warn_unused_result))
@@ -296,7 +296,7 @@ void **index_cpaq (cpaq_t const *restrict cpaq, size_t i) {
 
 __attribute__ ((leaf, nonnull (1, 2), nothrow))
 void enqueues (cpaq_t *restrict q,
-   void * const *restrict e, size_t n) {
+   void *e[], size_t n) {
 #ifdef TEST
 #ifndef NDEBUG
    size_t chk_rem  = remaining_space_cpaq (q);
@@ -341,7 +341,7 @@ void enqueues (cpaq_t *restrict q,
 
 __attribute__ ((leaf, nonnull (1, 2), nothrow))
 void dequeues (cpaq_t *restrict q,
-   void **restrict e, size_t n) {
+   void *e[], size_t n) {
 #ifdef TEST
 #ifndef NDEBUG
    size_t chk_rem  = remaining_space_cpaq (q);

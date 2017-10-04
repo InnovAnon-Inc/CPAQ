@@ -100,19 +100,16 @@ ssize_t indexOf_cpaq_chk (cpaq_t const *restrict cpaq,
    void const *restrict e)
 __attribute__ ((nonnull (1, 2), nothrow, pure, warn_unused_result)) ;
 
-void *index_cpaq (cpaq_t const *restrict cpaq, size_t i)
+void **index_cpaq (cpaq_t const *restrict cpaq, size_t i)
 __attribute__ ((leaf, nonnull (1), nothrow, pure, returns_nonnull, warn_unused_result)) ;
 
 void enqueues (cpaq_t *restrict q,
-	void *const *restrict e, size_t n)
+	void *e[], size_t n)
 __attribute__ ((leaf, nonnull (1, 2), nothrow)) ;
 
 void dequeues (cpaq_t *restrict q,
-	void **restrict e, size_t n)
+	void *e[], size_t n)
 __attribute__ ((leaf, nonnull (1, 2), nothrow)) ;
-
-typedef __attribute__ ((nonnull (1)))
-void (*free_t) (void *restrict data) ;
 
 void frees_cpaq (cpaq_t const *restrict cpaq, free_t cb)
 __attribute__ ((leaf, nonnull (1, 2), nothrow)) ;
