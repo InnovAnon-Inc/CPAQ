@@ -28,7 +28,7 @@ static void dumpq(cpaq_t const *restrict q) {
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static void *cpaq_alloc (void const *restrict arg_) {
    size_t const *restrict arg = (size_t const *restrict) arg_;
-   return ez_alloc_cpaq (arg);
+   return ez_alloc_cpaq (*arg);
 }
 
 __attribute__ ((nonnull (1), nothrow))
