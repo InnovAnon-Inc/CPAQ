@@ -13,3 +13,6 @@
 [submodule "swap"]
 	path = swap
 	url = https://github.com/InnovAnon-Inc/swap.git
+[submodule "StD"]
+	path = StD
+	url = https://github.com/InnovAnon-Inc/StD.git
