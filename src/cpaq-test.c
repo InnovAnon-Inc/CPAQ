@@ -6,41 +6,124 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <mmalloc.h>
+#include <simon.h>
+
 #include <cpaq.h>
 
-#define N (4)
+__attribute__ ((nonnull (1), nothrow))
+static void dumpq(cpaq_t const *restrict q) {
+   size_t i;
+   fputs ("Q: ", stderr);
+   for (i = 0; i != used_space_cpaq (q); i++) {
+      void *restrict head = *index_cpaq (q, i);
+      fprintf (stderr, "(%1d:%3d), ", (int) i, *(int *restrict) head);
+   }
+   fputs ("\n", stderr);
+}
+
+__attribute__ ((nonnull (1), nothrow, warn_unused_result))
+static int generate_pint (void *restrict arg_) {
+   int **restrict arg = (int **restrict) arg_;
+   *arg = malloc (sizeof (int));
+   error_check (*arg == NULL) return -1;
+   **arg = random_range_java (-10, 10); /* arbitrary params */
+   return 0;
+}
+
+__attribute__ ((nonnull (1), nothrow))
+static void degenerate_pint (void *restrict arg_) {
+   int **restrict arg = (int **restrict) arg_;
+   free (*arg);
+}
+
+__attribute__ ((nonnull (1), nothrow))
+static void degenerates_pint (void *restrict arg_, size_t n) {
+   int **restrict arg = (int **restrict) arg_;
+   size_t i;
+   for (i = 0; i != n; i++)
+      free (arg[i]);
+}
+
+__attribute__ ((nonnull (1), nothrow, warn_unused_result))
+static int cpaq_add_test (void *restrict arg_) {
+   int *tmp;
+   int err = add_test (arg_, &tmp,
+      (isfull_t) isfull, generate_int, (add_t) enqueue);
+   if (err == TEST_NA) return 0;
+   error_check (err != 0) return -1;
+   fprintf (stderr, "cpaq_add_test (), tmp:%d\n", *tmp);
+   dumpq ((cpaq_t *restrict) arg_);
+   return 0;
+}
+
+__attribute__ ((nonnull (1), nothrow, warn_unused_result))
+static int cpaq_remove_test (void *restrict arg_) {
+   int *tmp;
+   int err = remove_test2 (arg_, &tmp,
+      (isempty_t) isempty, (remove_t) dequeue, degenerate_pint);
+   if (err == TEST_NA) return 0;
+   error_check (err != 0) return -1;
+   fprintf (stderr, "cpaq_remove_test (), tmp:%d\n", *tmp);
+   dumpq ((cpaq_t *restrict) arg_);
+   return 0;
+}
+
+__attribute__ ((nonnull (1), nothrow, warn_unused_result))
+static int cpaq_adds_test (void *restrict arg_) {
+   int *tmps[13]; /* arbitrary params */
+   error_check (adds_test (arg_, tmps, ARRSZ (tmps),
+      (remaining_space_t) remaining_space_caq,
+      generates_pint, (adds_t) enqueues) != 0)
+      return -1;
+   /* can't print tmps, because we don't know how many elements are init'd */
+   fprintf (stderr, "cpaq_adds_test ()\n");
+   dumpq ((cpaq_t *restrict) arg_);
+   return 0;
+}
+
+__attribute__ ((nonnull (1), nothrow, warn_unused_result))
+static int cpaq_removes_test (void *restrict arg_) {
+   int *tmps[12]; /* arbitrary params */
+   error_check (removes2_test (arg_, tmps, ARRSZ (tmps),
+      (used_space_t) used_space_cpaq, (removes_t) dequeues,
+      (frees_t) degenerates_pint) != 0)
+      return -1;
+   /* can't print tmps, because we don't know how many elements are init'd */
+   fprintf (stderr, "cpaq_removes_test ()\n");
+   dumpq ((cpaq_t *restrict) arg_);
+   return 0;
+}
+
+__attribute__ ((nonnull (1), nothrow, warn_unused_result))
+static int cpaq_cb (void *restrict arg) {
+   stdcb_t tests[4];
+
+   TODO (more tests)
+   tests[0] = cpaq_add_test;
+   tests[1] = cpaq_remove_test;
+   tests[2] = cpaq_adds_test;
+   tests[3] = cpaq_removes_test;
+
+   error_check (random_ops (arg, tests, ARRSZ (tests), 100) != 0) /* arbitrary params */
+   /*random_ops2 (arg, tests, ARRSZ (tests));*/
+      return -1;
+
+   return 0;
+}
 
 int main(void) {
-#ifdef TEST
-   int arr[] = {101, 202, 303, 404, 505};
-   int const *tmp;
+   time_t t;
 
-   cpaq_t q;
-   if (alloc_queue (&q, (size_t) N) != 0) return EXIT_FAILURE;
+   t = time (NULL);
+   srand ((unsigned int) t);
 
-   dumpq(&q, 1);
-   if (enqueue (&q, arr + 0) != 0) return EXIT_FAILURE;dumpq(&q, 2);
-   if (enqueue (&q, arr + 1) != 0) return EXIT_FAILURE;dumpq(&q, 3);
-   if (enqueue (&q, arr + 2) != 0) return EXIT_FAILURE;dumpq(&q, 4);
-   if (enqueue (&q, arr + 3) != 0) puts ("overflow");dumpq(&q, 5);
-   if (enqueue (&q, arr + 4) != 0) puts ("overflow");dumpq(&q, 6);
-   /*memset (arr, 0, sizeof (arr));*/
-   printf("%i\n", *(int const *) dequeue(&q));
-      dumpq(&q, 7);
-   printf("%i\n", *(int const *) dequeue(&q));
-      dumpq(&q, 8);
-   printf("%i\n", *(int const *) dequeue(&q));
-      dumpq(&q, 9);
-   tmp = (int const *) dequeue (&q);
-   if (tmp == NULL) puts ("NULL");
-   else printf("%i\n", *tmp);
-      dumpq(&q, 10);
-   tmp = (int const *) dequeue (&q);
-   if (tmp == NULL) puts ("NULL");
-   else printf ("%i\n", *tmp);
-      dumpq(&q, 11);
+   size_t n = 10; /* arbitrary params */
 
-   free_queue (&q);
-#endif
+   error_check (ezmalloc (ez_alloc_cpaq, &n,
+      cpaq_cb,
+      (do_free_t) ez_free_cpaq) != 0)
+      return EXIT_FAILURE;
+
    return EXIT_SUCCESS;
 }
