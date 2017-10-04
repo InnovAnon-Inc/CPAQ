@@ -370,7 +370,7 @@ void dequeues (cpaq_t *restrict q,
    size_t chk_used = used_space_cpaq (q);
 #endif
    size_t diff = q->array.n - q->head;
-   array_t tmp;
+   parray_t tmp;
    assert (n == 0 || ! isempty (q));
    assert (used_space_cpaq (q) >= n);
    if (q->tail > q->head || n <= diff)
