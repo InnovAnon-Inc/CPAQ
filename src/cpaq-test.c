@@ -34,6 +34,18 @@ static int generate_pint (void *restrict arg_) {
    return 0;
 }
 
+__attribute__ ((nonnull (1), nothrow, warn_unused_result))
+static int generates_pint (void *restrict arg_, size_t n) {
+   int **restrict arg = (int **restrict) arg_;
+   size_t i, j;
+   for (i = 0; i != n; i++)
+      error_check (generate_pint (arg + i) != 0) {
+         degenerates_pint (arg_, i);
+         return -1;
+      }
+   return 0;
+}
+
 __attribute__ ((nonnull (1), nothrow))
 static void degenerate_pint (void *restrict arg_) {
    int **restrict arg = (int **restrict) arg_;
