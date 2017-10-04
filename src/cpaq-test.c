@@ -2,9 +2,12 @@
 #include <config.h>
 #endif
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <unistd.h>
 
 #include <mmalloc.h>
 #include <simon.h>
@@ -114,11 +117,10 @@ static int cpaq_cb (void *restrict arg) {
 
 int main(void) {
    time_t t;
+   size_t n = 10; /* arbitrary params */
 
    t = time (NULL);
    srand ((unsigned int) t);
-
-   size_t n = 10; /* arbitrary params */
 
    error_check (ezmalloc (ez_alloc_cpaq, &n,
       cpaq_cb,
