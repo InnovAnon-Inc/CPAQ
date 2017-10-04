@@ -67,9 +67,9 @@ static int generates_pint (void *restrict arg_, size_t n) {
 }
 
 __attribute__ ((nonnull (1, 2), nothrow))
-static void cpaq_enqueue (void *restrict ds, void *restrict arg_) {
+static void cpaq_enqueue (void *restrict ds, void const *restrict arg_) {
    cpaq_t *restrict cpaq = (cpaq_t *restrict) ds;
-   int const **restrict arg = (int const **restrict) arg_;
+   void *const *restrict arg = (void *const *restrict) arg_;
    enqueue (cpaq, *arg);
 }
 
