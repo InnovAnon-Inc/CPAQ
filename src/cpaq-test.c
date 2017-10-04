@@ -57,7 +57,7 @@ static int generate_pint (void *restrict arg_) {
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int generates_pint (void *restrict arg_, size_t n) {
    int **restrict arg = (int **restrict) arg_;
-   size_t i, j;
+   size_t i;
    for (i = 0; i != n; i++)
       error_check (generate_pint (arg + i) != 0) {
          degenerates_pint (arg_, i);
@@ -66,11 +66,18 @@ static int generates_pint (void *restrict arg_, size_t n) {
    return 0;
 }
 
+__attribute__ ((nonnull (1, 2), nothrow))
+static void cpaq_enqueue (void *restrict ds, void *restrict arg_) {
+   cpaq_t *restrict cpaq = (cpaq_t *restrict) ds;
+   int const **restrict arg = (int const **restrict) arg_;
+   enqueue (cpaq, *arg);
+}
+
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int cpaq_add_test (void *restrict arg_) {
    int *tmp;
    int err = padd_test (arg_, &tmp,
-      (isfull_t) isfull, generate_pint, (add_t) enqueue);
+      (isfull_t) isfull, generate_pint, cpaq_enqueue);
    if (err == TEST_NA) return 0;
    error_check (err != 0) return -1;
    fprintf (stderr, "cpaq_add_test (), tmp:%d\n", *tmp);
@@ -78,6 +85,7 @@ static int cpaq_add_test (void *restrict arg_) {
    return 0;
 }
 
+__attribute__ ((nonnull (1, 2), nothrow))
 static void cpaq_dequeue (void *restrict ds, void *restrict arg_) {
    cpaq_t *restrict cpaq = (cpaq_t *restrict) ds;
    int const **restrict arg = (int const **restrict) arg_;
