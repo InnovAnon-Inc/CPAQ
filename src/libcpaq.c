@@ -55,7 +55,7 @@ void enqueue (
 	/*puts ("enqueue ()");*/
    /*error_check (isfull (q) != false) return -1;*/
    assert (! isfull (q));
-   set_parray (&(q->parray), q->tail, elem);
+   set_parray (&(q->array), q->tail, elem);
    /*q->Q[q->tail] = elem;*/
    q->tail = (q->tail + 1) % q->array.n;
    assert (chk_rem  - 1 == remaining_space_cpaq (q));
