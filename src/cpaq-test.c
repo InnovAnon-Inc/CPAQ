@@ -99,7 +99,7 @@ static int cpaq_remove_test (void *restrict arg_) {
       (isempty_t) isempty, cpaq_dequeue, degenerate_pint);
    if (err == TEST_NA) return 0;
    error_check (err != 0) return -1;
-   fprintf (stderr, "cpaq_remove_test (), tmp:%d\n", *tmp);
+   /*fprintf (stderr, "cpaq_remove_test (), tmp:%d\n", *tmp);*/
    dumpq ((cpaq_t *restrict) arg_);
    return 0;
 }
