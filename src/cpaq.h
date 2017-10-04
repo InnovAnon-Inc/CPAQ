@@ -8,10 +8,10 @@ extern "C" {
 #include <sys/types.h>
 
 #include <glitter.h>
+#include <parray.h>
 
 typedef struct {
-	void **restrict Q;
-	size_t n;
+	parray_t array;
 	size_t head;
 	size_t tail;
 } cpaq_t;
@@ -25,7 +25,7 @@ __attribute__ ((leaf, nonnull (1, 2), nothrow)) ;
 int alloc_queue (
 	cpaq_t *restrict q,
 	size_t n)
-__attribute__ ((nonnull (1), nothrow, warn_unused_result)) ;
+__attribute__ ((leaf, nonnull (1), nothrow, warn_unused_result)) ;
 
 void free_queue (cpaq_t const *restrict q)
 __attribute__ ((leaf, nonnull (1), nothrow)) ;
@@ -88,7 +88,6 @@ __attribute__ ((leaf, nonnull (1), nothrow, pure, warn_unused_result)) ;
 size_t remaining_space_cpaq (cpaq_t const *restrict cpaq)
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result)) ;
 
-#ifdef TEST
 size_t indexOf_cpaq (cpaq_t const *restrict cpaq,
 	void const *restrict e)
 __attribute__ ((leaf, nonnull (1, 2), nothrow, pure, warn_unused_result)) ;
@@ -103,7 +102,6 @@ __attribute__ ((nonnull (1, 2), nothrow, pure, warn_unused_result)) ;
 
 void *index_cpaq (cpaq_t const *restrict cpaq, size_t i)
 __attribute__ ((leaf, nonnull (1), nothrow, pure, returns_nonnull, warn_unused_result)) ;
-#endif
 
 void enqueues (cpaq_t *restrict q,
 	void *const *restrict e, size_t n)

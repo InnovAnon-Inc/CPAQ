@@ -24,25 +24,24 @@ void init_queue (
    cpaq_t *restrict q,
    void *arr[],
    size_t n) {
-   q->Q = arr;
-   q->n = n;
+   init_parray (&(q->array), arr, n + 1);
    q->head = 0;
    q->tail = 0;
 }
 
-__attribute__ ((nonnull (1), nothrow, warn_unused_result))
+__attribute__ ((leaf, nonnull (1), nothrow, warn_unused_result))
 int alloc_queue (
    cpaq_t *restrict q,
    size_t n) {
-   void **restrict arr = malloc (n * sizeof (void *));
-   error_check (arr == NULL) return -1;
-   init_queue (q, arr, n);
+   error_check (alloc_parray (&(q->array), n + 1) != 0) return -1;
+   q->head = 0;
+   q->tail = 0;
    return 0;
 }
 
 __attribute__ ((leaf, nonnull (1), nothrow))
 void free_queue (cpaq_t const *restrict q) {
-   free (q->Q);
+   free_parray (&(q->array));
 }
 
 __attribute__ ((nonnull (1, 2), nothrow))
@@ -56,8 +55,9 @@ void enqueue (
 	/*puts ("enqueue ()");*/
    /*error_check (isfull (q) != false) return -1;*/
    assert (! isfull (q));
-   q->Q[q->tail] = elem;
-   q->tail = (q->tail + 1) % q->n;
+   set_parray (&(q->parray), q->tail, elem);
+   /*q->Q[q->tail] = elem;*/
+   q->tail = (q->tail + 1) % q->array.n;
    assert (chk_rem  - 1 == remaining_space_cpaq (q));
    assert (chk_used + 1 == used_space_cpaq      (q));
 }
@@ -80,8 +80,9 @@ void const *dequeue (cpaq_t *restrict q) {
    void const *restrict x;
    /*error_check (isempty (q) != false) return NULL;*/
    assert (! isempty (q));
-   x = q->Q[q->head];
-   q->head = (q->head + 1) % q->n;
+   get_parray (&(q->parray), q->head, x);
+   /*x = q->Q[q->head];*/
+   q->head = (q->head + 1) % q->array.n;
    assert (chk_rem  + 1 == remaining_space_cpaq (q));
    assert (chk_used - 1 == used_space_cpaq      (q));
    return x;
@@ -100,22 +101,22 @@ __attribute__ ((leaf, nonnull (1), nothrow, pure, warn_unused_result))
 bool isempty (cpaq_t const *restrict q) {
    if (q->head == q->tail) {
       assert (used_space_cpaq (q) == 0);
-      assert (remaining_space_cpaq (q) == q->n - 1);
+      assert (remaining_space_cpaq (q) == q->array.n - 1);
       return true;
    }
    assert (used_space_cpaq (q) > 0);
-   assert (remaining_space_cpaq (q) < q->n - 1);
+   assert (remaining_space_cpaq (q) < q->array.n - 1);
    return false;
 }
 
 __attribute__ ((leaf, nonnull (1), nothrow, pure, warn_unused_result))
 bool isfull (cpaq_t const *restrict q) {
-   if (q->head == (q->tail + 1) % q->n) {
-      assert (used_space_cpaq (q) == q->n - 1);
+   if (q->head == (q->tail + 1) % q->array.n) {
+      assert (used_space_cpaq (q) == q->array.n - 1);
       assert (remaining_space_cpaq (q) == 0);
       return true;
    }
-   assert (used_space_cpaq (q) < q->n - 1);
+   assert (used_space_cpaq (q) < q->array.n - 1);
    assert (remaining_space_cpaq (q) > 0);
    return false;
 }
@@ -123,7 +124,8 @@ bool isfull (cpaq_t const *restrict q) {
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result))
 void *gethead(cpaq_t const *restrict q) {
    assert (! isempty (q));
-   return q->Q[q->head];
+   /*return q->Q[q->head];*/
+   return get_parray ((&q->array), q->head);
 }
 
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result))
@@ -135,7 +137,8 @@ void *gethead_chk (cpaq_t const *restrict q) {
 __attribute__ ((leaf, nonnull (1), nothrow, pure, warn_unused_result))
 void *gettail (cpaq_t const *restrict q) {
    assert (! isempty (q));
-   return q->Q[(q->tail - 1) % q->n];
+   /*return q->Q[(q->tail - 1) % q->n];*/
+   return get_parray (&(q->array), (q->tail - 1) % q->array.n);
 }
 
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result))
@@ -163,7 +166,7 @@ void dumpq(
 
 __attribute__ ((const, leaf, nothrow, warn_unused_result))
 size_t cpaqsz (size_t n) {
-   return sizeof (cpaq_t) + sizeof (void *) * (n + 1);
+   return sizeof (cpaq_t) + pdatasz (n + 1);
 }
 
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result))
@@ -179,7 +182,7 @@ cpaq_t *ez_alloc_cpaq (size_t maxn) {
 	void **restrict data;
 
 	eszs[0] = sizeof (cpaq_t);
-	eszs[1] = sizeof (void **) * (maxn + 1);
+	eszs[1] = pdatasz (maxn + 1);
    combined[0] = (void *restrict *restrict) &cpaq;
    combined[1] = (void *restrict *restrict) &data;
 	error_check (mmalloc2 (combined, eszs,
@@ -204,24 +207,24 @@ size_t used_space_cpaq (cpaq_t const *restrict cpaq) {
    if (cpaq->head <= cpaq->tail)
       ret = cpaq->tail - cpaq->head;
    else
-      ret = cpaq->tail /*+ 1*/ + (cpaq->n - cpaq->head);
-   assert (ret <= cpaq->n - 1);
+      ret = cpaq->tail /*+ 1*/ + (cpaq->array.n - cpaq->head);
+   assert (ret <= cpaq->array.n - 1);
    return ret;
 }
 
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result))
 size_t remaining_space_cpaq (cpaq_t const *restrict cpaq) {
-   size_t ret = cpaq->n - 1 - used_space_cpaq (cpaq);
-   assert (ret <= cpaq->n - 1);
+   size_t ret = cpaq->array.n - 1 - used_space_cpaq (cpaq);
+   assert (ret <= cpaq->array.n - 1);
    return ret;
 }
 
-#ifdef TEST
 __attribute__ ((leaf, nonnull (1, 2), nothrow, pure, warn_unused_result))
 size_t indexOf_cpaq (cpaq_t const *restrict cpaq,
 	void const *restrict e) {
    /* check from head to tail */
    /* or check from head to end, then from 0 to tail */
+   /*
    size_t ret;
    ssize_t r;
    array_t tmp;
@@ -235,52 +238,66 @@ size_t indexOf_cpaq (cpaq_t const *restrict cpaq,
    if (r >= 0) return (size_t) r;
    init_array2 (&tmp, &(cpaq->array), (size_t) 0, cpaq->tail);
    return indexOf_array (&tmp, e);
+   */
+   size_t ret;
+   ssize_t r;
+   parray_t tmp;
+   if (cpaq->head <= cpaq->tail) {
+      init_parray2 (&tmp, &(cpaq->array), cpaq->head,
+         cpaq->tail - cpaq->head);
+      return indexOf_parray (&tmp, e);
+   }
+   init_parray2 (&tmp, &(cpaq->array), cpaq->head, cpaq->array.n - cpaq->head);
+   r = indexOf_parray_chk (&tmp, e);
+   if (r >= 0) return (size_t) r;
+   init_parray2 (&tmp, &(cpaq->array), (size_t) 0, cpaq->tail);
+   return indexOf_parray (&tmp, e);
 }
 
 __attribute__ ((leaf, nonnull (1, 2), nothrow, pure, warn_unused_result))
 bool contains_cpaq (cpaq_t const *restrict cpaq,
 	void const *restrict e) {
-   array_t tmp;
+   parray_t tmp;
    if (cpaq->head <= cpaq->tail) {
-      init_array2 (&tmp, &(cpaq->array), cpaq->head,
+      init_parray2 (&tmp, &(cpaq->array), cpaq->head,
          cpaq->tail - cpaq->head);
-      return contains_array (&tmp, e);
+      return contains_parray (&tmp, e);
    }
-   init_array2 (&tmp, &(cpaq->array), cpaq->head, cpaq->array.n - cpaq->head);
-   if (contains_array (&tmp, e)) return true;
-   init_array2 (&tmp, &(cpaq->array), (size_t) 0, cpaq->tail);
-   return contains_array (&tmp, e);
+   init_parray2 (&tmp, &(cpaq->array), cpaq->head, cpaq->array.n - cpaq->head);
+   if (contains_parray (&tmp, e)) return true;
+   init_parray2 (&tmp, &(cpaq->array), (size_t) 0, cpaq->tail);
+   return contains_parray (&tmp, e);
 }
 
 __attribute__ ((nonnull (1, 2), nothrow, pure, warn_unused_result))
 ssize_t indexOf_cpaq_chk (cpaq_t const *restrict cpaq,
    void const *restrict e) {
    ssize_t ret;
-   array_t tmp;
+   parray_t tmp;
    if (cpaq->head <= cpaq->tail) {
-      init_array2 (&tmp, &(cpaq->array), cpaq->head,
+      init_parray2 (&tmp, &(cpaq->array), cpaq->head,
          cpaq->tail - cpaq->head);
-      return indexOf_array_chk (&tmp, e);
+      return indexOf_parray_chk (&tmp, e);
    }
-   init_array2 (&tmp, &(cpaq->array), cpaq->head, cpaq->array.n - cpaq->head);
-   ret = indexOf_array_chk (&tmp, e);
+   init_parray2 (&tmp, &(cpaq->array), cpaq->head, cpaq->array.n - cpaq->head);
+   ret = indexOf_parray_chk (&tmp, e);
    if (ret >= 0) return ret;
-   init_array2 (&tmp, &(cpaq->array), (size_t) 0, cpaq->tail);
-   ret = indexOf_array_chk (&tmp, e);
+   init_parray2 (&tmp, &(cpaq->array), (size_t) 0, cpaq->tail);
+   ret = indexOf_parray_chk (&tmp, e);
    assert (ret == (ssize_t) -1 || ret < (ssize_t) cpaq->array.n);
    assert (ret == (ssize_t) -1 || ret < (ssize_t) remaining_space_cpaq (cpaq));
    return ret;
 }
 
 __attribute__ ((leaf, nonnull (1), nothrow, pure, returns_nonnull, warn_unused_result))
-void *index_cpaq (cpaq_t const *restrict cpaq, size_t i) {
-   return index_array (&(cpaq->array), (cpaq->head + i) % cpaq->array.n);
+void **index_cpaq (cpaq_t const *restrict cpaq, size_t i) {
+   return index_parray (&(cpaq->array), (cpaq->head + i) % cpaq->array.n);
 }
-#endif
 
 __attribute__ ((leaf, nonnull (1, 2), nothrow))
 void enqueues (cpaq_t *restrict q,
    void * const *restrict e, size_t n) {
+#ifdef TEST
 #ifndef NDEBUG
    size_t chk_rem  = remaining_space_cpaq (q);
    size_t chk_used = used_space_cpaq (q);
@@ -297,11 +314,35 @@ void enqueues (cpaq_t *restrict q,
    q->tail = (q->tail + n) % q->n;
    assert (chk_rem  - n == remaining_space_cpaq (q));
    assert (chk_used + n == used_space_cpaq      (q));
+#endif
+
+#ifndef NDEBUG
+   size_t chk_rem  = remaining_space_cpaq (q);
+   size_t chk_used = used_space_cpaq (q);
+#endif
+   size_t diff = q->array.n - q->tail;
+   parray_t tmp;
+   assert (n == 0 || ! isfull (q));
+   assert (remaining_space_cpaq (q) >= n);
+   if (q->head > q->tail || n <= diff)
+      sets_parray (&(q->array), q->tail, e, n);
+   else {
+      sets_parray (&(q->array), q->tail, e, diff);
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wdiscarded-qualifiers"
+      init_parray (&tmp, e, n);
+	#pragma GCC diagnostic pop
+      sets_parray (&(q->array), (size_t) 0, /*e+diff*/index_parray (&tmp, diff), n - diff);
+   }
+   q->tail = (q->tail + n) % q->array.n;
+   assert (chk_rem  - n == remaining_space_cpaq (q));
+   assert (chk_used + n == used_space_cpaq      (q));
 }
 
 __attribute__ ((leaf, nonnull (1, 2), nothrow))
 void dequeues (cpaq_t *restrict q,
    void **restrict e, size_t n) {
+#ifdef TEST
 #ifndef NDEBUG
    size_t chk_rem  = remaining_space_cpaq (q);
    size_t chk_used = used_space_cpaq (q);
@@ -322,10 +363,34 @@ void dequeues (cpaq_t *restrict q,
    q->head = (q->head + n) % q->n;
    assert (chk_rem  + n == remaining_space_cpaq (q));
    assert (chk_used - n == used_space_cpaq      (q));
+#endif
+
+#ifndef NDEBUG
+   size_t chk_rem  = remaining_space_cpaq (q);
+   size_t chk_used = used_space_cpaq (q);
+#endif
+   size_t diff = q->array.n - q->head;
+   array_t tmp;
+   assert (n == 0 || ! isempty (q));
+   assert (used_space_cpaq (q) >= n);
+   if (q->tail > q->head || n <= diff)
+      sets_parray (&(q->array), q->head, e, n);
+   else {
+      sets_parray (&(q->array), q->head, e, diff);
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wdiscarded-qualifiers"
+      init_parray (&tmp, e, n);
+	#pragma GCC diagnostic pop
+      sets_parray (&(q->array), (size_t) 0, /*e + diff*/index_parray (&tmp, diff), n - diff);
+   }
+   q->head = (q->head + n) % q->array.n;
+   assert (chk_rem  + n == remaining_space_cpaq (q));
+   assert (chk_used - n == used_space_cpaq      (q));
 }
 
 __attribute__ ((leaf, nonnull (1, 2), nothrow))
 void frees_cpaq (cpaq_t const *restrict cpaq, free_t f) {
+#ifdef TEST
    size_t i;
    if (cpaq->head <= cpaq->tail) {
 	#pragma GCC ivdep
@@ -338,5 +403,18 @@ void frees_cpaq (cpaq_t const *restrict cpaq, free_t f) {
 	#pragma GCC ivdep
       for (i = 0;          i != cpaq->tail; i++)
          f (cpaq->Q[i]);
+   }
+#endif
+
+   parray_t tmp;
+   if (cpaq->head <= cpaq->tail) {
+      init_parray2 (&tmp, &(cpaq->array), cpaq->head,
+         cpaq->tail - cpaq->head);
+      frees_parray (&tmp, f);
+   } else {
+      init_parray2 (&tmp, &(cpaq->array), cpaq->head, cpaq->array.n - cpaq->head);
+      frees_parray (&tmp, f);
+      init_parray2 (&tmp, &(cpaq->array), (size_t) 0, cpaq->tail);
+      frees_parray (&tmp, f);
    }
 }
