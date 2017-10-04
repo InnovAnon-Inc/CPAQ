@@ -26,6 +26,26 @@ static void dumpq(cpaq_t const *restrict q) {
 }
 
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
+static void *cpaq_alloc (void const *restrict arg_) {
+   size_t const *restrict arg = (size_t const *restrict) arg_;
+   return ez_alloc_cpaq (arg);
+}
+
+__attribute__ ((nonnull (1), nothrow))
+static void degenerate_pint (void *restrict arg_) {
+   int **restrict arg = (int **restrict) arg_;
+   free (*arg);
+}
+
+__attribute__ ((nonnull (1), nothrow))
+static void degenerates_pint (void *restrict arg_, size_t n) {
+   int **restrict arg = (int **restrict) arg_;
+   size_t i;
+   for (i = 0; i != n; i++)
+      free (arg[i]);
+}
+
+__attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int generate_pint (void *restrict arg_) {
    int **restrict arg = (int **restrict) arg_;
    *arg = malloc (sizeof (int));
@@ -44,20 +64,6 @@ static int generates_pint (void *restrict arg_, size_t n) {
          return -1;
       }
    return 0;
-}
-
-__attribute__ ((nonnull (1), nothrow))
-static void degenerate_pint (void *restrict arg_) {
-   int **restrict arg = (int **restrict) arg_;
-   free (*arg);
-}
-
-__attribute__ ((nonnull (1), nothrow))
-static void degenerates_pint (void *restrict arg_, size_t n) {
-   int **restrict arg = (int **restrict) arg_;
-   size_t i;
-   for (i = 0; i != n; i++)
-      free (arg[i]);
 }
 
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
@@ -134,9 +140,9 @@ int main(void) {
    t = time (NULL);
    srand ((unsigned int) t);
 
-   error_check (ezmalloc (ez_alloc_cpaq, &n,
+   error_check (ezmalloc (cpaq_alloc, &n,
       cpaq_cb,
-      (do_free_t) ez_free_cpaq) != 0)
+      (free_t) ez_free_cpaq) != 0)
       return EXIT_FAILURE;
 
    return EXIT_SUCCESS;
