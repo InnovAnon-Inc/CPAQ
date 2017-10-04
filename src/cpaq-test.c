@@ -143,6 +143,7 @@ static int cpaq_cb (void *restrict arg) {
    error_check (random_ops (arg, tests, ARRSZ (tests), 100) != 0) /* arbitrary params */
    /*random_ops2 (arg, tests, ARRSZ (tests));*/
       return -1;
+   frees_cpaq ((cpaq_t *restrict) arg, degenerate_pint);
 
    return 0;
 }
