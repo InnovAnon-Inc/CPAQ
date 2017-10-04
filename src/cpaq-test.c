@@ -78,11 +78,17 @@ static int cpaq_add_test (void *restrict arg_) {
    return 0;
 }
 
+static void caq_dequeue (void *restrict ds, void *restrict arg_) {
+   cpaq_t *restrict cpaq = (cpaq_t *restrict) ds;
+   int const **restrict arg = (int const **restrict) arg_;
+   *arg = dequeue (cpaq);
+}
+
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int cpaq_remove_test (void *restrict arg_) {
    int *tmp;
    int err = premove_test (arg_, &tmp,
-      (isempty_t) isempty, (remove_t) dequeue, degenerate_pint);
+      (isempty_t) isempty, caq_dequeue, degenerate_pint);
    if (err == TEST_NA) return 0;
    error_check (err != 0) return -1;
    fprintf (stderr, "cpaq_remove_test (), tmp:%d\n", *tmp);
