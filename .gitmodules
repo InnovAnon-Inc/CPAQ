@@ -10,3 +10,6 @@
 [submodule "PArray"]
 	path = PArray
 	url = https://github.com/InnovAnon-Inc/PArray.git
+[submodule "swap"]
+	path = swap
+	url = https://github.com/InnovAnon-Inc/swap.git
