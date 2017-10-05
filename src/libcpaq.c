@@ -374,14 +374,14 @@ void dequeues (cpaq_t *restrict q,
    assert (n == 0 || ! isempty (q));
    assert (used_space_cpaq (q) >= n);
    if (q->tail > q->head || n <= diff)
-      sets_parray (&(q->array), q->head, e, n);
+      gets_parray (&(q->array), q->head, e, n);
    else {
-      sets_parray (&(q->array), q->head, e, diff);
+      gets_parray (&(q->array), q->head, e, diff);
 	#pragma GCC diagnostic push
 	#pragma GCC diagnostic ignored "-Wdiscarded-qualifiers"
       init_parray (&tmp, e, n);
 	#pragma GCC diagnostic pop
-      sets_parray (&(q->array), (size_t) 0, /*e + diff*/index_parray (&tmp, diff), n - diff);
+      gets_parray (&(q->array), (size_t) 0, /*e + diff*/index_parray (&tmp, diff), n - diff);
    }
    q->head = (q->head + n) % q->array.n;
    assert (chk_rem  + n == remaining_space_cpaq (q));
