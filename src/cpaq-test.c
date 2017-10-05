@@ -194,7 +194,7 @@ static int cpaq_cb (void *restrict arg) {
    tests[2] = cpaq_adds_test;
    tests[3] = cpaq_removes_test;
 
-   error_check (random_ops (arg, tests, ARRSZ (tests), 100) != 0) /* arbitrary params */
+   error_check (random_ops (arg, tests, ARRSZ (tests), 1000) != 0) /* arbitrary params */
    /*random_ops2 (arg, tests, ARRSZ (tests));*/
       return -1;
    frees_cpaq ((cpaq_t *restrict) arg, free);
