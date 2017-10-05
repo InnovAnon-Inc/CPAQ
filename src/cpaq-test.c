@@ -129,12 +129,13 @@ static int cpaq_remove_test (void *restrict arg_) {
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int cpaq_adds_test (void *restrict arg_) {
    int *tmps[13]; /* arbitrary params */
+   fprintf (stderr, "cpaq_adds_test ()\n");
+   dumpq ((cpaq_t *restrict) arg_);
    error_check (padds_test (arg_, tmps, ARRSZ (tmps),
       (remaining_space_t) remaining_space_cpaq,
       generates_pint, (adds_t) enqueues) != 0)
       return -1;
    /* can't print tmps, because we don't know how many elements are init'd */
-   fprintf (stderr, "cpaq_adds_test ()\n");
    dumpq ((cpaq_t *restrict) arg_);
    return 0;
 }
@@ -142,12 +143,13 @@ static int cpaq_adds_test (void *restrict arg_) {
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int cpaq_removes_test (void *restrict arg_) {
    int *tmps[12]; /* arbitrary params */
+   fprintf (stderr, "cpaq_removes_test ()\n");
+   dumpq ((cpaq_t *restrict) arg_);
    error_check (premoves_test (arg_, tmps, ARRSZ (tmps),
       (used_space_t) used_space_cpaq, (removes_t) dequeues,
       (frees_t) degenerates_pint) != 0)
       return -1;
    /* can't print tmps, because we don't know how many elements are init'd */
-   fprintf (stderr, "cpaq_removes_test ()\n");
    dumpq ((cpaq_t *restrict) arg_);
    return 0;
 }
