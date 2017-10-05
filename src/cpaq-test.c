@@ -80,7 +80,10 @@ static void cpaq_enqueue (void *restrict ds, void const *restrict arg_) {
    cpaq_t *restrict cpaq = (cpaq_t *restrict) ds;
    void *const *restrict arg = (void *const *restrict) arg_;
 #ifndef NDEBUG
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wstrict-aliasing"
    fprintf (stderr, "cpaq_enqueue (arg:%d)\n", **(int *const *restrict) arg);
+	#pragma GCC diagnostic pop
 #endif
    enqueue (cpaq, *arg);
 #ifndef NDEBUG
