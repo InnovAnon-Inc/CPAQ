@@ -43,8 +43,11 @@ static void degenerates_pint (void *restrict arg_, size_t n) {
    size_t i;
    for (i = 0; i != n; i++) {
 #ifndef NDEBUG
-      fprintf (stderr, "degenerates_pint (n:%d), *(arg[i:%d]):%d\n",
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
+      fprintf (stderr, "degenerates_pint (n:%d), arg[i:%d]:%d\n",
          (int) n, (int) i, (int) (arg[i]));
+	#pragma GCC diagnostic pop
       fprintf (stderr, "degenerates_pint (n:%d), *(arg[i:%d]):%d\n",
          (int) n, (int) i, *(arg[i]));
 #endif
