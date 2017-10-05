@@ -142,13 +142,32 @@ static int cpaq_adds_test (void *restrict arg_) {
 
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int cpaq_removes_test (void *restrict arg_) {
+   __attribute__ ((nonnull (1), nothrow))
+   static void degenerates_pint2 (void *restrict arg_, size_t n) {
+      int **restrict arg = (int **restrict) arg_;
+      size_t i;
+      dumpq ((cpaq_t *restrict) arg_);
+      for (i = 0; i != n; i++) {
+   #ifndef NDEBUG
+         fprintf (stderr, "degenerates_pint (n:%d)\n", (int) n);
+         fprintf (stderr, "*(arg[i:%d]):%d\n",
+            (int) i, *(arg[i]));
+   #endif
+         free (arg[i]);
+      }
+   }
+
+
+
    int *tmps[12]; /* arbitrary params */
    fprintf (stderr, "cpaq_removes_test ()\n");
    dumpq ((cpaq_t *restrict) arg_);
    error_check (premoves_test (arg_, tmps, ARRSZ (tmps),
       (used_space_t) used_space_cpaq, (removes_t) dequeues,
       (frees_t) degenerates_pint) != 0)
-      return -1;
+   /*error_check (removes_test (arg_, tmps, ARRSZ (tmps),
+      (used_space_t) used_space_cpaq, (removes_t) dequeues) != 0)
+      return -1;*/
    /* can't print tmps, because we don't know how many elements are init'd */
    dumpq ((cpaq_t *restrict) arg_);
    return 0;
