@@ -34,6 +34,9 @@ static void *cpaq_alloc (void const *restrict arg_) {
 __attribute__ ((nonnull (1), nothrow))
 static void degenerate_pint (void *restrict arg_) {
    int **restrict arg = (int **restrict) arg_;
+#ifndef NDEBUG
+   fprintf (stderr, "degenerate_pint (arg:%d)\n", **arg);
+#endif
    free (*arg);
 }
 
@@ -43,8 +46,9 @@ static void degenerates_pint (void *restrict arg_, size_t n) {
    size_t i;
    for (i = 0; i != n; i++) {
 #ifndef NDEBUG
-      fprintf (stderr, "degenerates_pint (n:%d), *(arg[i:%d]):%d\n",
-         (int) n, (int) i, *(arg[i]));
+      fprintf (stderr, "degenerates_pint (n:%d)\n", (int) n);
+      fprintf (stderr, "*(arg[i:%d]):%d\n",
+         (int) i, *(arg[i]));
 #endif
       free (arg[i]);
    }
@@ -75,7 +79,13 @@ __attribute__ ((nonnull (1, 2), nothrow))
 static void cpaq_enqueue (void *restrict ds, void const *restrict arg_) {
    cpaq_t *restrict cpaq = (cpaq_t *restrict) ds;
    void *const *restrict arg = (void *const *restrict) arg_;
+#ifndef NDEBUG
+   fprintf (stderr, "cpaq_enqueue (arg:%d)\n", **(int *const *restrict) arg);
+#endif
    enqueue (cpaq, *arg);
+#ifndef NDEBUG
+   dumpq (cpaq);
+#endif
 }
 
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
@@ -94,7 +104,14 @@ __attribute__ ((nonnull (1, 2), nothrow))
 static void cpaq_dequeue (void *restrict ds, void *restrict arg_) {
    cpaq_t *restrict cpaq = (cpaq_t *restrict) ds;
    int const **restrict arg = (int const **restrict) arg_;
+#ifndef NDEBUG
+   fprintf (stderr, "cpaq_dequeue ()");
+#endif
    *arg = dequeue (cpaq);
+#ifndef NDEBUG
+   fprintf (stderr, "**arg:%d\n", **arg);
+   dumpq (cpaq);
+#endif
 }
 
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
