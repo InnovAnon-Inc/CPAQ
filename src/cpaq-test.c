@@ -44,6 +44,8 @@ static void degenerates_pint (void *restrict arg_, size_t n) {
    for (i = 0; i != n; i++) {
 #ifndef NDEBUG
       fprintf (stderr, "degenerates_pint (n:%d), *(arg[i:%d]):%d\n",
+         (int) n, (int) i, (int) (arg[i]));
+      fprintf (stderr, "degenerates_pint (n:%d), *(arg[i:%d]):%d\n",
          (int) n, (int) i, *(arg[i]));
 #endif
       free (arg[i]);
