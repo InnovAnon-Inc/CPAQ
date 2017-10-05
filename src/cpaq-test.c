@@ -41,8 +41,13 @@ __attribute__ ((nonnull (1), nothrow))
 static void degenerates_pint (void *restrict arg_, size_t n) {
    int **restrict arg = (int **restrict) arg_;
    size_t i;
-   for (i = 0; i != n; i++)
+   for (i = 0; i != n; i++) {
+#ifndef NDEBUG
+      fprintf (stderr, "degenerates_pint (n:%d), *(arg[i:%d]):%d\n",
+         (int) n, (int) i, *(arg[i]));
+#endif
       free (arg[i]);
+   }
 }
 
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
