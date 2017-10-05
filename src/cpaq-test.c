@@ -144,6 +144,7 @@ __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int cpaq_removes_test (void *restrict arg_) {
 	#pragma GCC diagnostic push
 	#pragma GCC diagnostic ignored "-Wpedantic"
+	#pragma GCC diagnostic ignored "-Wtrampolines"
    __attribute__ ((nonnull (1), nothrow))
    void degenerates_pint2 (void *restrict arg__, size_t n) {
 	#pragma GCC diagnostic pop
