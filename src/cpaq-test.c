@@ -145,9 +145,9 @@ static int cpaq_removes_test (void *restrict arg_) {
 	#pragma GCC diagnostic push
 	#pragma GCC diagnostic ignored "-Wpedantic"
    __attribute__ ((nonnull (1), nothrow))
-   void degenerates_pint2 (void *restrict arg_, size_t n) {
+   void degenerates_pint2 (void *restrict arg__, size_t n) {
 	#pragma GCC diagnostic pop
-      int **restrict arg = (int **restrict) arg_;
+      int **restrict arg = (int **restrict) arg__;
       size_t i;
       dumpq ((cpaq_t *restrict) arg_);
       for (i = 0; i != n; i++) {
