@@ -143,7 +143,10 @@ static int cpaq_adds_test (void *restrict arg_) {
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int cpaq_removes_test (void *restrict arg_) {
    __attribute__ ((nonnull (1), nothrow))
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wpedantic"
    static void degenerates_pint2 (void *restrict arg_, size_t n) {
+	#pragma GCC diagnostic pop
       int **restrict arg = (int **restrict) arg_;
       size_t i;
       dumpq ((cpaq_t *restrict) arg_);
@@ -159,12 +162,13 @@ static int cpaq_removes_test (void *restrict arg_) {
 
 
 
+
    int *tmps[12]; /* arbitrary params */
    fprintf (stderr, "cpaq_removes_test ()\n");
    dumpq ((cpaq_t *restrict) arg_);
    error_check (premoves_test (arg_, tmps, ARRSZ (tmps),
       (used_space_t) used_space_cpaq, (removes_t) dequeues,
-      (frees_t) degenerates_pint) != 0)
+      (frees_t) degenerates_pint2) != 0)
    /*error_check (removes_test (arg_, tmps, ARRSZ (tmps),
       (used_space_t) used_space_cpaq, (removes_t) dequeues) != 0)
       return -1;*/
