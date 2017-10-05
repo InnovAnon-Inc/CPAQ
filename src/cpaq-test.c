@@ -91,7 +91,10 @@ static void cpaq_enqueue (void *restrict ds, void const *restrict arg_) {
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int cpaq_add_test (void *restrict arg_) {
    int *tmp;
-   int err = padd_test (arg_, &tmp,
+   int err;
+   fprintf (stderr, "cpaq_add_test ()\n");
+   dumpq ((cpaq_t *restrict) arg_);
+   err = padd_test (arg_, &tmp,
       (isfull_t) isfull, generate_pint, cpaq_enqueue);
    if (err == TEST_NA) return 0;
    error_check (err != 0) return -1;
@@ -117,7 +120,10 @@ static void cpaq_dequeue (void *restrict ds, void *restrict arg_) {
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int cpaq_remove_test (void *restrict arg_) {
    int *tmp;
-   int err = premove_test (arg_, &tmp,
+   int err;
+   fprintf (stderr, "cpaq_remove_test ()\n");
+   dumpq ((cpaq_t *restrict) arg_);
+   err = premove_test (arg_, &tmp,
       (isempty_t) isempty, cpaq_dequeue, degenerate_pint);
    if (err == TEST_NA) return 0;
    error_check (err != 0) return -1;
