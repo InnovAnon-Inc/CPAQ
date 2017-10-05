@@ -132,13 +132,13 @@ static int cpaq_removes_test (void *restrict arg_) {
 
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 static int cpaq_cb (void *restrict arg) {
-   stdcb_t tests[4];
+   stdcb_t tests[3];
 
    TODO (more tests)
    tests[0] = cpaq_add_test;
    tests[1] = cpaq_remove_test;
    tests[2] = cpaq_adds_test;
-   tests[3] = cpaq_removes_test;
+   /*tests[3] = cpaq_removes_test;*/
 
    error_check (random_ops (arg, tests, ARRSZ (tests), 100) != 0) /* arbitrary params */
    /*random_ops2 (arg, tests, ARRSZ (tests));*/
