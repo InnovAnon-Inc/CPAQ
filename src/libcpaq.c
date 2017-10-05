@@ -183,8 +183,11 @@ cpaq_t *ez_alloc_cpaq (size_t maxn) {
 
 	eszs[0] = sizeof (cpaq_t);
 	eszs[1] = pdatasz (maxn + 1);
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wstrict-aliasing"
    combined[0] = (void *restrict *restrict) &cpaq;
    combined[1] = (void *restrict *restrict) &data;
+	#pragma GCC diagnostic pop
 	error_check (mmalloc2 (combined, eszs,
 		eszs[0] + eszs[1], ARRSZ (eszs)) != 0)
 		return NULL;
