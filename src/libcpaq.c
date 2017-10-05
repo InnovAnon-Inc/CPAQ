@@ -409,12 +409,14 @@ void frees_cpaq (cpaq_t const *restrict cpaq, free_t f) {
    parray_t tmp;
    if (cpaq->head <= cpaq->tail) {
       init_parray2 (&tmp, &(cpaq->array), cpaq->head,
-         cpaq->tail - cpaq->head);
+         cpaq->head - 1 + (cpaq->tail - cpaq->head));
       frees_parray (&tmp, f);
    } else {
-      init_parray2 (&tmp, &(cpaq->array), cpaq->head, cpaq->array.n - cpaq->head);
+      init_parray2 (&tmp, &(cpaq->array), cpaq->head,
+         cpaq->head - 1 + (cpaq->array.n - cpaq->head));
       frees_parray (&tmp, f);
-      init_parray2 (&tmp, &(cpaq->array), (size_t) 0, cpaq->tail);
+      init_parray2 (&tmp, &(cpaq->array), (size_t) 0,
+         cpaq->tail - 1);
       frees_parray (&tmp, f);
    }
 }
