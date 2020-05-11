@@ -13,6 +13,6 @@ libcpaq_la_LIBADD = $(LIBCPAQ_LIBADD)
 
 #include $(top_srcdir)/StD/src/Makefile-LIBADD.inc
 
-include ../StD/src/Makefile-LIBADD.inc
+include ../../StD/src/Makefile-LIBADD.inc
 bin_PROGRAMS = cpaq-test
 cpaq_test_LDADD = libcpaq.la $(LIBCPAQ_LIBADD) -lsimon $(LIBSIMON_LIBADD)
