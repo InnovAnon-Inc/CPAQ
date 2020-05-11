@@ -1,9 +1,6 @@
 [submodule "m4"]
 	path = m4
 	url = https://github.com/InnovAnon-Inc/m4-common.git
-[submodule "swap"]
-	path = swap
-	url = https://github.com/InnovAnon-Inc/swap.git
 [submodule "StD"]
 	path = StD
 	url = https://github.com/InnovAnon-Inc/StD.git
