@@ -22,6 +22,12 @@ AC_CHECK_HEADERS([glitter.h])
 
 AC_CHECK_LIB([stdlib],[malloc])
 
+LIBCPAQ_LIBADD="`PATH=src:$PATH libcpaq_config --libs`"
+AC_SUBST(LIBCPAQ_LIBADD)
+
+CPAQ_TEST_LIBADD="libcpaq.la `PATH=src:$PATH cpaq_test_config --libs`"
+AC_SUBST(CPAQ_TEST_LIBADD)
+
 INNOVANON_WARNINGS([])
 
 AC_OUTPUT
