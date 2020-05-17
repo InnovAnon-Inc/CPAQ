@@ -1,21 +1,15 @@
 AM_CPPFLAGS = -D__STDC_INT64__
 
-#include Makefile-LIBADD.inc
-dist_bin_SCRIPTS = libcpaq_config cpaq_test_config
-
 lib_LTLIBRARIES =
 bin_PROGRAMS    =
 
 lib_LTLIBRARIES += libcpaq.la
 include_HEADERS = cpaq.h
-#libcpaq_la_LIBADD = $(LIBCPAQ_LIBADD)
-libcpaq_la_LIBADD = @LIBCPAQ_LIBADD@
+libcpaq_la_CPPFLAGS = $(GLITTER_CFLAGS) $(MMALLOC_CFLAGS) $(PARRAY_CFLAGS)
+libcpaq_la_LIBADD   = $(GLITTER_LIBS)   $(MMALLOC_LIBS)   $(PARRAY_LIBS)
 
-#include $(top_srcdir)/StD/src/Makefile-LIBADD.inc
-
-#include ../../StD/src/Makefile-LIBADD.inc
 bin_PROGRAMS += cpaq-test
-#cpaq_test_LDADD = libcpaq.la $(LIBCPAQ_LIBADD) -lsimon $(LIBSIMON_LIBADD)
-#cpaq_test_LDADD = $(CPAQ_TEST_LIBADD)
-cpaq_test_LDADD = @CPAQ_TEST_LIBADD@
+cpaq_test_CPPFLAGS =        $(GLITTER_CFLAGS) $(MMALLOC_CFLAGS) $(PARRAY_CFLAGS) $(SIMON_CFLAGS)
+cpaq_test_LDADD    = -lcpaq $(GLITTER_LIBS)   $(MMALLOC_LIBS)   $(PARRAY_LIBS)   $(SIMON_LIBS)  
 EXTRA_cpaq_test_DEPENDENCIES = libcpaq.la
+

@@ -1,0 +1,15 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+cpaq_utility=cpaq-test
+
+Name: @PACKAGE_NAME@ test
+Description: cpaq library test application
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -lcpaq
+Cflags: -I${includedir}
+Requires:
+Requires.private: -lparray -lmmalloc -lsimon
+
