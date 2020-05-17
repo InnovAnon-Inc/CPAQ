@@ -27,6 +27,7 @@ AC_CHECK_LIB([stdlib],[malloc])
 
 PKG_CHECK_MODULES([GLITTER],[glitter],,)
 PKG_CHECK_MODULES([PARRAY],[libparray],,)
+PKG_CHECK_MODULES([MMALLOC],[libmmalloc],,)
 PKG_CHECK_MODULES([SIMON],[libsimon],,)
 
 INNOVANON_WARNINGS([])
