@@ -11,5 +11,6 @@ Version: @PACKAGE_VERSION@
 Libs: -L${libdir} -lcpaq
 Cflags: -I${includedir}
 Requires:
-Requires.private: -lparray -lmmalloc -lsimon
+#Requires.private: -lparray -lmmalloc -lsimon
+Requires.private: libparray libmmalloc libsimon
 

@@ -10,6 +10,8 @@ Description: cpaq library
 Version: @PACKAGE_VERSION@
 Libs: -L${libdir} -lcpaq
 Cflags: -I${includedir}
-Requires: glitter -lparray
-Requires.private: -lmmalloc
+#Requires: glitter -lparray
+#Requires.private: -lmmalloc
+Requires: glitter libparray
+Requires.private: libmmalloc
 
